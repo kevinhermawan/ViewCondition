@@ -11,18 +11,26 @@ public extension View {
     }
     
     @ViewBuilder
-    func visible(if condition: Bool) -> some View {
+    func visible(if condition: Bool, removeCompletely: Bool = false) -> some View {
         if condition {
             self
         } else {
-            self.hidden()
+            if removeCompletely {
+                EmptyView()
+            } else {
+                self.hidden()
+            }
         }
     }
     
     @ViewBuilder
-    func hide(if condition: Bool) -> some View {
+    func hide(if condition: Bool, removeCompletely: Bool = false) -> some View {
         if condition {
-            self.hidden()
+            if removeCompletely {
+                EmptyView()
+            } else {
+                self.hidden()
+            }
         } else {
             self
         }

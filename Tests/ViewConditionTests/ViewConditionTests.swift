@@ -30,10 +30,18 @@ final class ViewConditionTests: XCTestCase {
     }
     
     func testVisibleModifierFalse() throws {
-        let view = Text("Hidden").visible(if: false)
+        let view = Text("Visible").visible(if: false)
         
         let isHidden = try view.inspect().text().isHidden()
         XCTAssertTrue(isHidden)
+    }
+    
+    func testVisibleModifierFalseRemoveCompletely() throws {
+        let view = Text("Visible").visible(if: false, removeCompletely: true)
+        
+        XCTAssertThrowsError(try view.inspect().text()) { error in
+            XCTAssertTrue(error is InspectionError)
+        }
     }
     
     func testHideModifierTrue() throws {
@@ -44,9 +52,17 @@ final class ViewConditionTests: XCTestCase {
     }
     
     func testHideModifierFalse() throws {
-        let view = Text("Visible").hide(if: false)
+        let view = Text("Hidden").hide(if: false)
         
         let isHidden = try view.inspect().text().isHidden()
         XCTAssertFalse(isHidden)
+    }
+    
+    func testHideModifierTrueRemoveCompletely() throws {
+        let view = Text("Hidden").hide(if: true, removeCompletely: true)
+        
+        XCTAssertThrowsError(try view.inspect().text()) { error in
+            XCTAssertTrue(error is InspectionError)
+        }
     }
 }
