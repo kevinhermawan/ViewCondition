@@ -1,3 +1,9 @@
+## 1.0.4
+
+### Added
+
+- feat: adds new conditional modifiers for specific OS
+
 ## 1.0.3
 
 ### Misc
