@@ -1,3 +1,9 @@
+## 1.0.3
+
+### Misc
+
+- ci: use Xcode 15
+
 ## 1.0.2
 
 ### Added
