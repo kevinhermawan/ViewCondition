@@ -1,15 +1,24 @@
+//
+//  ViewCondition.swift
+//
+//
+//  Created by Kevin Hermawan on 02/12/23.
+//
+
 import SwiftUI
 
-/// An extension to the `View` protocol that provides conditional view modifiers.
+/// An extension to the `View` protocol providing conditional view modifiers.
 ///
-/// This extension adds methods to SwiftUI's `View` type that allow you to conditionally
-/// modify the view. These methods are useful for creating more readable and concise view
-/// hierarchies in SwiftUI.
+/// This extension enriches SwiftUI's `View` type with methods that enable conditional
+/// modifications of views. These additions are particularly beneficial for creating
+/// readable and concise view hierarchies in SwiftUI.
 ///
 /// Methods:
 /// - `if(_:content:)`: Applies a modifier to the view based on a condition.
-/// - `visible(if:removeCompletely:)`: Conditionally shows or hides the view.
-/// - `hide(if:removeCompletely:)`: Conditionally hides or removes the view.
+/// - `visible(if:removeCompletely:)`: Conditionally shows or hides the view based on a Boolean condition.
+/// - `visible(on:)`: Conditionally shows or hides the view based on the operating system.
+/// - `hide(if:removeCompletely:)`: Conditionally hides or removes the view based on a Boolean condition.
+/// - `hide(on:)`: Conditionally hides or removes the view based on the operating system.
 public extension View {
     /// Conditionally applies a modifier to the view.
     ///
@@ -53,6 +62,23 @@ public extension View {
         }
     }
     
+    /// Controls the view's visibility based on the operating system.
+    ///
+    /// This method conditionally displays the view depending on the operating system.
+    /// It leverages the `visible(if:removeCompletely:)` method to manage visibility.
+    ///
+    /// - Parameters:
+    ///   - os: The operating system to check against.
+    /// - Returns: The view, either as is or as an `EmptyView`, based on the operating system.
+    @ViewBuilder
+    func visible(on os: OperatingSystem) -> some View {
+        #if os(iOS)
+        self.visible(if: os == .iOS, removeCompletely: true)
+        #elseif os(macOS)
+        self.visible(if: os == .macOS, removeCompletely: true)
+        #endif
+    }
+    
     /// Hides the view based on a condition, with an option to remove it when hidden.
     ///
     /// This method hides the view if the specified `condition` is true. Depending on
@@ -73,5 +99,22 @@ public extension View {
         } else {
             self
         }
+    }
+    
+    /// Hides the view based on the operating system.
+    ///
+    /// This method hides the view depending on the operating system. It uses the `hide(if:removeCompletely:)` method
+    /// internally to determine visibility.
+    ///
+    /// - Parameters:
+    ///   - os: The operating system to check against.
+    /// - Returns: A hidden view or the original view, contingent upon the operating system.
+    @ViewBuilder
+    func hide(on os: OperatingSystem) -> some View {
+        #if os(iOS)
+        self.hide(if: os == .iOS, removeCompletely: true)
+        #elseif os(macOS)
+        self.hide(if: os == .macOS, removeCompletely: true)
+        #endif
     }
 }
