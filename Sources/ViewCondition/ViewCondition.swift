@@ -15,6 +15,7 @@ import SwiftUI
 ///
 /// Methods:
 /// - `if(_:content:)`: Applies a modifier to the view based on a condition.
+/// - `if(os:content:)`: Applies a modifier to the view based on the operating system.
 /// - `visible(if:removeCompletely:)`: Conditionally shows or hides the view based on a Boolean condition.
 /// - `visible(on:)`: Conditionally shows or hides the view based on the operating system.
 /// - `hide(if:removeCompletely:)`: Conditionally hides or removes the view based on a Boolean condition.
@@ -37,6 +38,24 @@ public extension View {
         } else {
             self
         }
+    }
+    
+    /// Applies a modifier to the view based on the operating system.
+    ///
+    /// This method allows for conditional modification of a view based on the operating system. It internally
+    /// utilizes `if(_:content:)` to apply the modification.
+    ///
+    /// - Parameters:
+    ///   - os: The operating system to check against.
+    ///   - content: A closure that modifies the view.
+    /// - Returns: A modified view for the specified OS; otherwise, the original view.
+    @ViewBuilder
+    func `if`<Content: View>(os: OperatingSystem, content: (Self) -> Content) -> some View {
+        #if os(iOS)
+        self.if(os == .iOS, content: content)
+        #elseif os(macOS)
+        self.if(os == .macOS, content: content)
+        #endif
     }
     
     /// Controls the view's visibility, with an option to remove it when not visible.
