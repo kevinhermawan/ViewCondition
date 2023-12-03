@@ -1,3 +1,9 @@
+## 1.0.5
+
+### Added
+
+- feat: adds new conditional renderer for specific OS
+
 ## 1.0.4
 
 ### Added
