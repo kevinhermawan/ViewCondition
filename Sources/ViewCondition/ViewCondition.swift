@@ -5,21 +5,10 @@
 //  Created by Kevin Hermawan on 02/12/23.
 //
 
+import Foundation
 import SwiftUI
 
 /// An extension to the `View` protocol providing conditional view modifiers.
-///
-/// This extension enriches SwiftUI's `View` type with methods that enable conditional
-/// modifications of views. These additions are particularly beneficial for creating
-/// readable and concise view hierarchies in SwiftUI.
-///
-/// Methods:
-/// - `if(_:content:)`: Applies a modifier to the view based on a condition.
-/// - `if(os:content:)`: Applies a modifier to the view based on the operating system.
-/// - `visible(if:removeCompletely:)`: Conditionally shows or hides the view based on a Boolean condition.
-/// - `visible(on:)`: Conditionally shows or hides the view based on the operating system.
-/// - `hide(if:removeCompletely:)`: Conditionally hides or removes the view based on a Boolean condition.
-/// - `hide(on:)`: Conditionally hides or removes the view based on the operating system.
 public extension View {
     /// Conditionally applies a modifier to the view.
     ///
@@ -42,20 +31,84 @@ public extension View {
     
     /// Applies a modifier to the view based on the operating system.
     ///
-    /// This method allows for conditional modification of a view based on the operating system. It internally
-    /// utilizes `if(_:content:)` to apply the modification.
+    /// This method allows for conditional modification of a view based on the operating system.
     ///
     /// - Parameters:
     ///   - os: The operating system to check against.
     ///   - content: A closure that modifies the view.
     /// - Returns: A modified view for the specified OS; otherwise, the original view.
     @ViewBuilder
-    func `if`<Content: View>(os: OperatingSystem, content: (Self) -> Content) -> some View {
-        #if os(iOS)
-        self.if(os == .iOS, content: content)
-        #elseif os(macOS)
-        self.if(os == .macOS, content: content)
-        #endif
+    func `if`<Content: View>(os: VCOS, content: (Self) -> Content) -> some View {
+        switch os {
+        case .iOS:
+#if os(iOS)
+            content(self)
+#else
+            self
+#endif
+        case .macOS:
+#if os(macOS)
+            content(self)
+#else
+            self
+#endif
+        case .tvOS:
+#if os(tvOS)
+            content(self)
+#else
+            self
+#endif
+        case .visionOS:
+#if os(visionOS)
+            content(self)
+#else
+            self
+#endif
+        case .watchOS:
+#if os(watchOS)
+            content(self)
+#else
+            self
+#endif
+        }
+    }
+    
+    /// Applies a modifier to the view based on the availability of a module.
+    ///
+    /// This method allows for conditional modification of a view based on whether a specific module can be imported.
+    ///
+    /// - Parameters:
+    ///   - module: The module to check for import availability.
+    ///   - content: A closure that modifies the view.
+    /// - Returns: A modified view if the module can be imported; otherwise, the original view.
+    @ViewBuilder
+    func `if`(canImport module: VCModule, content: (Self) -> some View) -> some View {
+        switch module {
+        case .uiKit:
+#if canImport(UIKit)
+            content(self)
+#else
+            self
+#endif
+        case .appKit:
+#if canImport(AppKit)
+            content(self)
+#else
+            self
+#endif
+        case .watchKit:
+#if canImport(WatchKit)
+            content(self)
+#else
+            self
+#endif
+        case .tvUIKit:
+#if canImport(TVUIKit)
+            content(self)
+#else
+            self
+#endif
+        }
     }
     
     /// Controls the view's visibility, with an option to remove it when not visible.
@@ -84,18 +137,81 @@ public extension View {
     /// Controls the view's visibility based on the operating system.
     ///
     /// This method conditionally displays the view depending on the operating system.
-    /// It leverages the `visible(if:removeCompletely:)` method to manage visibility.
     ///
     /// - Parameters:
     ///   - os: The operating system to check against.
     /// - Returns: The view, either as is or as an `EmptyView`, based on the operating system.
     @ViewBuilder
-    func visible(on os: OperatingSystem) -> some View {
-        #if os(iOS)
-        self.visible(if: os == .iOS, removeCompletely: true)
-        #elseif os(macOS)
-        self.visible(if: os == .macOS, removeCompletely: true)
-        #endif
+    func visible(on os: VCOS) -> some View {
+        switch os {
+        case .iOS:
+#if os(iOS)
+            self
+#else
+            EmptyView()
+#endif
+        case .macOS:
+#if os(macOS)
+            self
+#else
+            EmptyView()
+#endif
+        case .tvOS:
+#if os(tvOS)
+            self
+#else
+            EmptyView()
+#endif
+        case .visionOS:
+#if os(visionOS)
+            self
+#else
+            EmptyView()
+#endif
+        case .watchOS:
+#if os(watchOS)
+            self
+#else
+            EmptyView()
+#endif
+        }
+    }
+    
+    /// Controls the view's visibility based on the availability of a module.
+    ///
+    /// This method conditionally displays the view depending on whether a specific module can be imported.
+    ///
+    /// - Parameters:
+    ///   - module: The module to check for import availability.
+    /// - Returns: The view if the module can be imported; otherwise, an `EmptyView`.
+    @ViewBuilder
+    func visible(ifCanImport module: VCModule) -> some View {
+        switch module {
+        case .uiKit:
+#if canImport(UIKit)
+            self
+#else
+            EmptyView()
+#endif
+        case .appKit:
+#if canImport(AppKit)
+            self
+#else
+            EmptyView()
+#endif
+        case .watchKit:
+#if canImport(WatchKit)
+            self
+#else
+            EmptyView()
+#endif
+        case .tvUIKit:
+#if canImport(TVUIKit)
+            self
+#else
+            EmptyView()
+#endif
+        }
     }
     
     /// Hides the view based on a condition, with an option to remove it when hidden.
@@ -105,7 +221,7 @@ public extension View {
     ///
     /// - Parameters:
     ///   - condition: A Boolean value determining if the view should be hidden.
-    ///   - removeCompletely: Determines whether the view is removed (`true`) or just hidden (`false`) when the condition is met.
+    ///   - removeCompletely: Determines whether the view is removed (true) or just hidden (false) when the condition is met.
     /// - Returns: A hidden view, an `EmptyView`, or the original view, based on the condition.
     @ViewBuilder
     func hide(if condition: Bool, removeCompletely: Bool = false) -> some View {
@@ -122,18 +238,81 @@ public extension View {
     
     /// Hides the view based on the operating system.
     ///
-    /// This method hides the view depending on the operating system. It uses the `hide(if:removeCompletely:)` method
-    /// internally to determine visibility.
+    /// This method hides the view depending on the operating system.
     ///
     /// - Parameters:
     ///   - os: The operating system to check against.
     /// - Returns: A hidden view or the original view, contingent upon the operating system.
     @ViewBuilder
-    func hide(on os: OperatingSystem) -> some View {
-        #if os(iOS)
-        self.hide(if: os == .iOS, removeCompletely: true)
-        #elseif os(macOS)
-        self.hide(if: os == .macOS, removeCompletely: true)
-        #endif
+    func hide(on os: VCOS) -> some View {
+        switch os {
+        case .iOS:
+#if os(iOS)
+            EmptyView()
+#else
+            self
+#endif
+        case .macOS:
+#if os(macOS)
+            EmptyView()
+#else
+            self
+#endif
+        case .tvOS:
+#if os(tvOS)
+            EmptyView()
+#else
+            self
+#endif
+        case .visionOS:
+#if os(visionOS)
+            EmptyView()
+#else
+            self
+#endif
+        case .watchOS:
+#if os(watchOS)
+            EmptyView()
+#else
+            self
+#endif
+        }
+    }
+    
+    /// Hides the view based on the availability of a module.
+    ///
+    /// This method hides the view depending on whether a specific module can be imported.
+    ///
+    /// - Parameters:
+    ///   - module: The module to check for import availability.
+    /// - Returns: A hidden view if the module can be imported; otherwise, the original view.
+    @ViewBuilder
+    func hide(ifCanImport module: VCModule) -> some View {
+        switch module {
+        case .uiKit:
+#if canImport(UIKit)
+            EmptyView()
+#else
+            self
+#endif
+        case .appKit:
+#if canImport(AppKit)
+            EmptyView()
+#else
+            self
+#endif
+        case .watchKit:
+#if canImport(WatchKit)
+            EmptyView()
+#else
+            self
+#endif
+        case .tvUIKit:
+#if canImport(TVUIKit)
+            EmptyView()
+#else
+            self
+#endif
+        }
     }
 }
