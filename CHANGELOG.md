@@ -1,3 +1,11 @@
+## 2.0.0
+
+## What's Changed
+
+- feat: adds `canImport` condition by @kevinhermawan in https://github.com/kevinhermawan/ViewCondition/pull/1
+- ci: updates machine and packages by @kevinhermawan in https://github.com/kevinhermawan/ViewCondition/pull/2
+- feat: adds multiple conditions support by @kevinhermawan in https://github.com/kevinhermawan/ViewCondition/pull/3
+
 ## 1.0.5
 
 ### Added
