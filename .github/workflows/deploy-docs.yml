@@ -28,7 +28,7 @@ jobs:
       - name: Build docs
         run: swift package --allow-writing-to-directory ./docs generate-documentation --target ViewCondition --disable-indexing --output-path ./docs --transform-for-static-hosting --hosting-base-path ViewCondition
 
-      - uses: actions/upload-pages-artifact@v2
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: "docs"
 
