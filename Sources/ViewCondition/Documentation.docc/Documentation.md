@@ -1,32 +1,10 @@
-# ViewCondition
+# ``ViewCondition``
 
 An extension to the `View` protocol that provides conditional view modifiers.
 
 ## Overview
 
-`ViewCondition` enhances SwiftUI's conditional rendering capabilities, makes it easier for developers to create adaptive and responsive user interfaces. With `ViewCondition`, you can easily apply modifiers, control visibility, or hide views based on various conditions such as boolean logic, operating system, or module availability. This flexibility allows you to tailor your app's interface for different platforms and user needs without complex conditional statements.
-
-## Documentation
-
-You can find the documentation here: [https://kevinhermawan.github.io/ViewCondition/documentation/viewcondition](https://kevinhermawan.github.io/ViewCondition/documentation/viewcondition)
-
-## Installation
-
-You can add `ViewCondition` as a dependency to your project using Swift Package Manager by adding it to the dependencies value of your `Package.swift`.
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/kevinhermawan/ViewCondition.git", .upToNextMajor(from: "2.0.0"))
-]
-```
-
-Alternatively, in Xcode:
-
-1. Open your project in Xcode.
-2. Click on `File` -> `Swift Packages` -> `Add Package Dependency...`
-3. Enter the repository URL: `https://github.com/kevinhermawan/ViewCondition.git`
-4. Choose the version you want to add. You probably want to add the latest version.
-5. Click `Add Package`.
+``ViewCondition`` enhances SwiftUI's conditional rendering capabilities, makes it easier for developers to create adaptive and responsive user interfaces. With ``ViewCondition``, you can easily apply modifiers, control visibility, or hide views based on various conditions such as boolean logic, operating system, or module availability. This flexibility allows you to tailor your app's interface for different platforms and user needs without complex conditional statements.
 
 ## Usage
 
@@ -193,7 +171,3 @@ Text("Hidden on iOS or macOS")
 Text("Hidden if UIKit or AppKit is available")
     .hide(ifCanImport: [.uiKit, .appKit])
 ```
-
-## License
-
-[MIT License](/LICENSE)
