@@ -1,5 +1,5 @@
 //
-//  VCOS.swift
+//  OS.swift
 //
 //
 //  Created by Kevin Hermawan on 02/12/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum VCOS {
+public enum OS {
     case iOS
     case macOS
     case tvOS
